@@ -25,6 +25,10 @@ document.addEventListener("DOMContentLoaded", () => {
   todoInput.addEventListener("keypress", (e) => {
     if (e.key === "Enter") addTodo();
   });
+
+  // localStorageからタスクデータを読み込んで描画
+  todos = loadTodos();
+  renderTodos();
 });
 
 // タスク追加
@@ -39,6 +43,7 @@ function addTodo() {
   };
 
   todos.push(todo);
+  saveTodos();
   renderTodos();
   todoInput.value = "";
 }
@@ -54,4 +59,15 @@ function renderTodos() {
     `
     )
     .join("");
+}
+
+// LocalStorageへの保存
+function saveTodos() {
+  localStorage.setItem("todos", JSON.stringify(todos));
+}
+
+// LocalStorageからの読み込み
+function loadTodos() {
+  const todos = localStorage.getItem("todos");
+  return todos ? JSON.parse(todos) : [];
 }
