@@ -53,8 +53,21 @@ function renderTodos() {
   todoList.innerHTML = todos
     .map(
       (todo) => `
-        <div class="todo-item">
+        <div class="todo-item ${
+          todo.completed ? "completed" : ""
+        }" data-todo-id="${todo.id}">
+            <input type="checkbox"
+                   class="todo-checkbox"
+                   ${todo.completed ? "checked" : ""}
+                   onchange="toggleTodo(${todo.id})">
+
             <span class="todo-text">${todo.text}</span>
+
+            <div class="todo-actions">
+                <button class="delete-btn" onclick="deleteTodo(${todo.id})">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
         </div>
     `
     )
@@ -70,4 +83,23 @@ function saveTodos() {
 function loadTodos() {
   const todos = localStorage.getItem("todos");
   return todos ? JSON.parse(todos) : [];
+}
+
+// タスク完了切替
+function toggleTodo(id) {
+  const todo = todos.find((t) => t.id === id);
+  if (todo) {
+    todo.completed = !todo.completed;
+    saveTodos();
+    renderTodos();
+  }
+}
+
+// タスク削除
+function deleteTodo(id) {
+  if (confirm("このタスクを削除しますか？")) {
+    todos = todos.filter((t) => t.id !== id);
+    saveTodos();
+    renderTodos();
+  }
 }
