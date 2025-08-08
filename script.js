@@ -30,6 +30,8 @@ document.addEventListener("DOMContentLoaded", () => {
       setFilter(e.target.dataset.filter);
     });
   });
+  clearCompletedBtn.addEventListener("click", clearCompleted);
+  clearAllBtn.addEventListener("click", clearAll);
 
   // localStorageからタスクデータを読み込んで描画
   todos = loadTodos();
@@ -164,5 +166,25 @@ function getFilteredTodos() {
       return todos.filter((t) => t.completed);
     default:
       return todos;
+  }
+}
+
+// 完了済み削除
+function clearCompleted() {
+  if (confirm("完了済みのタスクをすべて削除しますか？")) {
+    todos = todos.filter((t) => !t.completed);
+    saveTodos();
+    renderTodos();
+    updateStats();
+  }
+}
+
+// 全削除
+function clearAll() {
+  if (confirm("すべてのタスクを削除しますか？この操作は元に戻せません。")) {
+    todos = [];
+    saveTodos();
+    renderTodos();
+    updateStats();
   }
 }
