@@ -19,4 +19,39 @@ document.addEventListener("DOMContentLoaded", () => {
   totalTasksEl = document.getElementById("totalTasks");
   completedTasksEl = document.getElementById("completedTasks");
   activeTasksEl = document.getElementById("activeTasks");
+
+  // 各イベントのリスナーを設定
+  addBtn.addEventListener("click", addTodo);
+  todoInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") addTodo();
+  });
 });
+
+// タスク追加
+function addTodo() {
+  const text = todoInput.value.trim();
+  if (!text) return;
+
+  const todo = {
+    id: Date.now(),
+    text: text,
+    completed: false,
+  };
+
+  todos.push(todo);
+  renderTodos();
+  todoInput.value = "";
+}
+
+// タスク完了切替
+function renderTodos() {
+  todoList.innerHTML = todos
+    .map(
+      (todo) => `
+        <div class="todo-item">
+            <span class="todo-text">${todo.text}</span>
+        </div>
+    `
+    )
+    .join("");
+}
